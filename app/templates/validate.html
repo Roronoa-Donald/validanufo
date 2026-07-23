@@ -30,10 +30,18 @@
         .btns { margin-top: 20px; display: flex; gap: 10px; }
         button { padding: 10px 18px; border: 0; border-radius: 8px; font-size: 15px; cursor: pointer; transition: opacity 0.2s; }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .ok { background: #22c55e; color: #fff; }
+        .ok { background: #22c5_5e; color: #fff; }
         .corr { background: #3b82f6; color: #fff; }
         .skip { background: #e2e8f0; }
         .ex { margin-top: 18px; padding: 12px; background: #f8fafc; border-left: 3px solid #94a3b8; font-size: 14px; border-radius: 4px; }
+        fieldset { border: 1px solid #cbd5e1; border-radius: 8px; margin: 14px 0; padding: 10px 14px; }
+        legend { font-size: 13px; color: #475569; font-weight: 600; padding: 0 6px; }
+        .pair { display: flex; gap: 8px; margin: 6px 0; }
+        .pair input { flex: 1; }
+        .pair button, .objcard button { background: #fee2e2; color: #991b1b; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+        .objcard { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin: 8px 0; }
+        .objcard div { font-size: 14px; margin: 2px 0; }
+        .addbtn { background: #e0e7ff; color: #3730a3; border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer; margin-top: 6px; }
         small { color: #64748b; }
         .nav-links { display: flex; gap: 10px; align-items: center; }
         .back-btn { color: white; text-decoration: none; font-size: 14px; opacity: 0.8; }
@@ -48,7 +56,7 @@
             <b>Validation — {{ collection_name }}</b>
         </div>
         <div class="bar"><div class="fill" id="fill"></div></div>
-        <span id="stat">0 / 0 validés</span>
+        <span id="stat">0 / 0 validés</span
     </header>
     <main>
         <div id="list"></div>
@@ -56,11 +64,11 @@
             <div class="card" id="card">
                 <p>Chargement des données...</p>
             </div>
-        </div>
+        </div
     </main>
 
     <script>
-        let rows = [], cur = 0;
+        let rows = [], cur = 0, schema = [];
         const collectionName = "{{ collection_name }}";
 
         async function api(u, d) {
@@ -78,13 +86,21 @@
 
         async function boot() {
             try {
-                rows = await api(`/api/rows/${collectionName}`);
+                const data = await api(`/api/rows/${collectionName}`);
+                rows = data.rows;
+                schema = data.schema;
                 let i = rows.findIndex(r => !r.valide_humain);
                 cur = i < 0 ? 0 : i;
                 render();
             } catch (e) {
                 document.getElementById('card').innerHTML = `<p style="color:red">Erreur : ${e.message}</p>`;
             }
+        }
+
+        function isVocabMode() {
+            if (schema.length === 0) return false;
+            const keys = schema.map(f => f.key);
+            return keys.includes('anufo') && keys.includes('fr_propose') && keys.includes('en_propose');
         }
 
         function render() {
@@ -95,19 +111,63 @@
             let L = document.getElementById('list');
             L.innerHTML = '';
             rows.forEach((r, i) => {
-                if (!r) return; // Protection contre les lignes nulles
+                if (!r) return;
                 let d = document.createElement('div');
                 d.className = 'row' + (i == cur ? ' sel' : '');
                 let b = r.valide_humain ? 'done' : (r.statut == 'fiable' ? 'fiable' : 'averif');
                 let bt = r.valide_humain ? 'validé' : (r.statut || 'à vérifier');
-                d.innerHTML = `<span class="anufo">${r.anufo_corrige || r.anufo || '—'}</span>
-                               <small>${r.fr_corrige || r.fr_propose || '—'}</small>
+
+                // Mapping simple pour la liste
+                const getVal = (obj, keys) => {
+                    for (let k of keys) { if (obj[k]) return obj[k]; }
+                    return '—';
+                };
+                let an = getVal(r, ['anufo_corrige', 'anufo', 'anufo_norm', 'mot']);
+                let fr = getVal(r, ['fr_corrige', 'fr_propose', 'fr', 'gloss_fr_principale']);
+
+                d.innerHTML = `<span class="anufo">${an}</span>
+                               <small>${fr}</small>
                                <span class="badge ${b}" style="margin-left:auto">${bt}</span>`;
                 d.onclick = () => { cur = i; render(); };
                 L.appendChild(d);
             });
 
             renderCard();
+        }
+
+        function fieldHtml(f, r) {
+            const val = r[f.key];
+            if (f.type == 'text') {
+                return `<label>${f.key}</label><input data-k="${f.key}" value="${(val == null ? '' : val).toString().replace(/"/g, '&quot;')}">`;
+            }
+            if (f.type == 'object') {
+                let sub = f.subfields.map(sk => {
+                    let v = (val && val[sk] != null) ? val[sk] : '';
+                    return `<label>${sk}</label><input data-k="${f.key}.${sk}" value="${String(v).replace(/"/g, '&quot;')}">`;
+                }).join('');
+                return `<fieldset><legend>${f.key}</legend>${sub}</fieldset>`;
+            }
+            if (f.type == 'list_of_chips') {
+                let chips = (val || []).map(x => `<span class="chip" onclick="fillChip('${f.target || ''}', '${String(x).replace(/'/g, "\\'")}')">${x}</span>`).join('');
+                return `<label>${f.key}</label><div class="cands">${chips || '<small>—</small>'}</div>`;
+            }
+            if (f.type == 'list_of_pairs') {
+                let pairs = (val || []).map((p, pi) => `<div class="pair">
+                    <input data-pair="${f.key}.${pi}.0" value="${String(p[0] || '').replace(/"/g, '&quot;')}">
+                    <input data-pair="${f.key}.${pi}.1" value="${String(p[1] || '').replace(/"/g, '&quot;')}">
+                    <button onclick="removePair('${f.key}', ${pi})">✕</button></div>`).join('');
+                return `<fieldset><legend>${f.key}</legend><div id="pairs_${f.key}">${pairs}</div>
+                    <button class="addbtn" onclick="addPair('${f.key}')">+ ajouter une paire</button></fieldset>`;
+            }
+            if (f.type == 'list_of_objects') {
+                let items = (val || []).map((o, oi) => `<div class="objcard">${f.item_keys.map(k => `<div><b>${k}:</b> ${typeof o[k] == 'object' ? JSON.stringify(o[k]) : (o[k] || '')}</div>`).join('')}
+                    <button onclick="removeObj('${f.key}', ${oi})">✕ retirer</button></div>`).join('');
+                let form = f.item_keys.map(k => `<input placeholder="${k}" data-newobj="${f.key}.${k}">`).join('');
+                return `<fieldset><legend>${f.key}</legend>${items || '<small>Aucun élément</small>'}
+                    <div class="pair">${form}</div>
+                    <button class="addbtn" onclick="addObj('${f.key}')">+ ajouter</button></fieldset>`;
+            }
+            return '';
         }
 
         function renderCard() {
@@ -118,50 +178,81 @@
                 return;
             }
 
-            // --- MAPPING UNIVERSEL DES CHAMPS ---
-            // On cherche la valeur dans plusieurs champs possibles selon le format du fichier
-            const getVal = (keys) => {
-                for (let k of keys) {
-                    if (r[k] !== undefined && r[k] !== null && r[k] !== '') return r[k];
-                }
-                return '';
-            };
+            if (isVocabMode()) {
+                // MODE VOCABULAIRE (Interface optimisée)
+                const getVal = (keys) => {
+                    for (let k of keys) { if (r[k] !== undefined && r[k] !== null && r[k] !== '') return r[k]; }
+                    return '';
+                };
+                let an = getVal(['anufo_corrige', 'anufo', 'anufo_norm', 'mot']);
+                let fr = getVal(['fr_corrige', 'fr_propose', 'fr', 'gloss_fr_principale']);
+                let en = getVal(['en_corrige', 'en_propose', 'en', 'english', 'gloss_en_principale']);
 
-            let an = getVal(['anufo_corrige', 'anufo', 'anufo_norm', 'mot']);
-            let fr = getVal(['fr_corrige', 'fr_propose', 'fr', 'gloss_fr_principale']);
-            let en = getVal(['en_corrige', 'en_propose', 'en', 'english', 'gloss_en_principale']);
-
-            // Gestion du statut (qc.status ou statut)
-            let statut = r.statut || (r.qc && r.qc.status) || 'à vérifier';
-
-            c.innerHTML = `
-                <h2>${an} <small>(${r.frequence || r.frequence_bible || '?'}×, source: ${r.source || (r.meta && r.meta.source) || '?'})</small></h2>
-                <label>Mot anufo (corriger si besoin)</label>
-                <input id="an" value="${an}">
-
-                <label>Traduction française</label>
-                <input id="fr" value="${fr}">
-                <div class="cands">${(r.fr_candidats || []).map(x => `<span class="chip" onclick="document.getElementById('fr').value='${x}'">${x}</span>`).join('')}</div>
-
-                <label>Traduction anglaise</label>
-                <input id="en" value="${en}">
-                <div class="cands">${(r.en_candidats || []).map(x => `<span class="chip" onclick="document.getElementById('en').value='${x}'">${x}</span>`).join('')}</div>
-
-                ${(r.exemple && r.exemple && r.exemple.anufo) ? `<div class="ex"><b>Exemple (${r.exemple.ref || ''}) :</b><br>${r.exemple.anufo}<br><small>${r.exemple.fr || ''}</small></div>` : ''}
-
-                ${(r.formes_fusionnees && r.formes_fusionnees.length > 1) ? `<div class="ex"><b>⚠ Formes fusionnées par ton :</b><br>${r.formes_fusionnees.map(x => `${x.anufo || '—'} (${x.frequence || '0'}×) → ${x.fr_propose || '?'} / ${x.en_propose || '?'}`).join('<br>')}</div>` : ''}
-
-                <label>Note (qc_note)</label>
-                <textarea id="qcnote" rows="2">${r.qc_note || (r.qc && r.qc.note) || ''}</textarea>
-
-                <div class="btns">
-                    <button id="btn-valide" class="ok" onclick="valide()">✓ Valider</button>
-                    <button id="btn-corr" class="corr" onclick="valide()">✎ Enregistrer</button>
-                    <button id="btn-skip" class="skip" onclick="next()">Passer →</button>
-                    <span id="save-indicator">Enregistrement...</span>
-                </div>
-                <p><small>Raccourcis : Entrée = valider · flèches ↑↓ = naviguer</small></p>`;
+                c.innerHTML = `
+                    <h2>${an} <small>(${r.frequence || r.frequence_bible || '?'}×, source: ${r.source || (r.meta && r.meta.source) || '?'})</small></h2>
+                    <label>Mot anufo (corriger si besoin)</label>
+                    <input id="an" value="${an}">
+                    <label>Traduction française</label>
+                    <input id="fr" value="${fr}">
+                    <div class="cands">${(r.fr_candidats || []).map(x => `<span class="chip" onclick="document.getElementById('fr').value='${x}'">${x}</span>`).join('')}</div>
+                    <label>Traduction anglaise</label>
+                    <input id="en" value="${en}">
+                    <div class="cands">${(r.en_candidats || []).map(x => `<span class="chip" onclick="document.getElementById('en').value='${x}'">${x}</span>`).join('')}</div>
+                    ${(r.exemple && r.exemple && r.exemple.anufo) ? `<div class="ex"><b>Exemple (${r.exemple.ref || ''}) :</b><br>${r.exemple.anufo}<br><small>${r.exemple.fr || ''}</small></div>` : ''}
+                    ${(r.formes_fusionnees && r.formes_fusionnees.length > 1) ? `<div class="ex"><b>⚠ Formes fusionnées par ton :</b><br>${r.formes_fusionnees.map(x => `${x.anufo || '—'} (${x.frequence || '0'}×) → ${x.fr_propose || '?'} / ${x.en_propose || '?'}`).join('<br>')}</div>` : ''}
+                    <label>Note (qc_note)</label>
+                    <textarea id="qcnote" rows="2">${r.qc_note || (r.qc && r.qc.note) || ''}</textarea>
+                    <div class="btns">
+                        <button id="btn-valide" class="ok" onclick="valide()">✓ Valider</button>
+                        <button id="btn-corr" class="corr" onclick="valide()">✎ Enregistrer</button>
+                        <button id="btn-skip" class="skip" onclick="next()">Passer →</button>
+                        <span id="save-indicator">Enregistrement...</span>
+                    </div>
+                    <p><small>Raccourcis : Entrée = valider · flèches ↑↓ = naviguer</small></p>`;
+            } else {
+                // MODE GÉNÉRIQUE (Interface dynamique basée sur le schéma)
+                let html = schema.map(f => fieldHtml(f, r)).join('');
+                html += `
+                    <label>Note (qc_note)</label>
+                    <textarea id="qcnote" rows="2">${r.qc_note || (r.qc && r.qc.note) || ''}</textarea>
+                    <div class="btns">
+                        <button id="btn-valide" class="ok" onclick="valide()">✓ Valider / Enregistrer</button>
+                        <button id="btn-skip" class="skip" onclick="next()">Passer →</button>
+                        <span id="save-indicator">Enregistrement...</span>
+                    </div>
+                    <p><small>Raccourcis : Entrée = valider · flèches ↑↓ = naviguer</small></p>`;
+                c.innerHTML = html;
+            }
         }
+
+        function fillChip(target, val) {
+            if (!target) return;
+            let el = document.querySelector(`[data-k="${target}"]`);
+            if (el) el.value = val;
+        }
+
+        function getPath(obj, path) {
+            let parts = path.split('.');
+            let o = obj;
+            for (let i = 0; i < parts.length - 1; i++) {
+                o = o[parts[i]] = o[parts[i]] || {};
+            }
+            return { o, k: parts[parts.length - 1] };
+        }
+
+        function addPair(key) { rows[cur][key] = rows[cur][key] || []; rows[cur][key].push(["", ""]); renderCard(); }
+        function removePair(key, idx) { rows[cur][key].splice(idx, 1); renderCard(); }
+        function addObj(key) {
+            let obj = {};
+            document.querySelectorAll(`[data-newobj^="${key}."]`).forEach(el => {
+                let k = el.getAttribute('data-newobj').split('.').slice(1).join('.');
+                obj[k] = el.value;
+            });
+            rows[cur][key] = rows[cur][key] || [];
+            rows[cur][key].push(obj);
+            renderCard();
+        }
+        function removeObj(key, idx) { rows[cur][key].splice(idx, 1); renderCard(); }
 
         async function valide() {
             let r = rows[cur];
@@ -170,18 +261,33 @@
             const btnSkip = document.getElementById('btn-skip');
             const indicator = document.getElementById('save-indicator');
 
-            // Désactiver les boutons et afficher l'indicateur
-            [btnVal, btnCorr, btnSkip].forEach(b => b.disabled = true);
-            indicator.style.display = 'inline';
+            [btnVal, btnCorr, btnSkip].forEach(b => { if(b) b.disabled = true; });
+            if(indicator) indicator.style.display = 'inline';
 
-            const data = {
-                ...r,
-                anufo_corrige: document.getElementById('an').value,
-                fr_corrige: document.getElementById('fr').value,
-                en_corrige: document.getElementById('en').value,
-                qc_note: document.getElementById('qcnote').value,
-                valide_humain: true
-            };
+            let data = { ...r };
+
+            if (isVocabMode()) {
+                data.anufo_corrige = document.getElementById('an').value;
+                data.fr_corrige = document.getElementById('fr').value;
+                data.en_corrige = document.getElementById('en').value;
+                data.qc_note = document.getElementById('qcnote').value;
+                data.valide_humain = true;
+            } else {
+                // Collecte dynamique des données
+                document.querySelectorAll('[data-k]').forEach(el => {
+                    let path = el.getAttribute('data-k');
+                    let { o, k } = getPath(data, path);
+                    o[k] = el.value;
+                });
+                document.querySelectorAll('[data-pair]').forEach(el => {
+                    let [key, idx, pos] = el.getAttribute('data-pair').split('.');
+                    if (!data[key]) data[key] = [];
+                    if (!data[key][+idx]) data[key][+idx] = [];
+                    data[key][+idx][+pos] = el.value;
+                });
+                data.qc_note = document.getElementById('qcnote').value;
+                data.valide_humain = true;
+            }
 
             try {
                 const res = await api('/api/save', {
@@ -191,14 +297,14 @@
                 });
 
                 if (res.ok) {
-                    rows[cur] = data; // Mise à jour locale immédiate
+                    rows[cur] = data;
                     next();
                 }
             } catch (e) {
                 alert("Erreur lors de la sauvegarde : " + e.message);
             } finally {
-                [btnVal, btnCorr, btnSkip].forEach(b => b.disabled = false);
-                indicator.style.display = 'none';
+                [btnVal, btnCorr, btnSkip].forEach(b => { if(b) b.disabled = false; });
+                if(indicator) indicator.style.display = 'none';
             }
         }
 

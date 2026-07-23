@@ -84,6 +84,32 @@ async def get_rows(collection_name: str):
             return JSONResponse(content={"error": "Collection non trouvée"}, status_code=404)
 
         collection = db[collection_name]
+        # Récupérer la première ligne pour construire le schéma
+        first_row = await collection.find_one({})
+        schema = []
+        if first_row:
+            for key, value in first_row.items():
+                if key in ["valide_humain", "qc_note", "_id"]:
+                    continue
+                if isinstance(value, dict):
+                    schema.append({"key": key, "type": "object", "subfields": list(value.keys())})
+                elif isinstance(value, list):
+                    if value and isinstance(value[0], dict):
+                        item_keys = list(value[0].keys())
+                        schema.append({"key": key, "type": "list_of_objects", "item_keys": item_keys})
+                    elif value and isinstance(value[0], list):
+                        schema.append({"key": key, "type": "list_of_pairs"})
+                    else:
+                        base = None
+                        for suffix in ("_candidats", "candidats"):
+                            if key.endswith(suffix):
+                                candidate_base = key[: -len(suffix)].rstrip("_")
+                                if candidate_base in first_row:
+                                    base = candidate_base
+                        schema.append({"key": key, "type": "list_of_chips", "target": base})
+                else:
+                    schema.append({"key": key, "type": "text"})
+
         # Tri par ID pour garantir la stabilité de l'ordre
         cursor = collection.find({}).sort("_id", 1)
         rows = await cursor.to_list(length=10000)
@@ -91,7 +117,7 @@ async def get_rows(collection_name: str):
         for row in rows:
             row["_id"] = str(row["_id"])
 
-        return JSONResponse(content=rows)
+        return JSONResponse(content={"rows": rows, "schema": schema})
     except Exception as e:
         logger.error(f"Erreur API rows ({collection_name}) : {e}")
         return JSONResponse(content={"error": f"Erreur lors de la récupération des données : {str(e)}"}, status_code=500)
