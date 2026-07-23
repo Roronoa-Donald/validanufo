@@ -95,11 +95,12 @@
             let L = document.getElementById('list');
             L.innerHTML = '';
             rows.forEach((r, i) => {
+                if (!r) return; // Protection contre les lignes nulles
                 let d = document.createElement('div');
                 d.className = 'row' + (i == cur ? ' sel' : '');
                 let b = r.valide_humain ? 'done' : (r.statut == 'fiable' ? 'fiable' : 'averif');
-                let bt = r.valide_humain ? 'validé' : r.statut;
-                d.innerHTML = `<span class="anufo">${r.anufo_corrige || r.anufo}</span>
+                let bt = r.valide_humain ? 'validé' : (r.statut || 'à vérifier');
+                d.innerHTML = `<span class="anufo">${r.anufo_corrige || r.anufo || '—'}</span>
                                <small>${r.fr_corrige || r.fr_propose || '—'}</small>
                                <span class="badge ${b}" style="margin-left:auto">${bt}</span>`;
                 d.onclick = () => { cur = i; render(); };
@@ -112,10 +113,14 @@
         function renderCard() {
             let r = rows[cur];
             let c = document.getElementById('card');
-            let fr = r.fr_corrige || r.fr_propose || '', en = r.en_corrige || r.en_propose || '', an = r.anufo_corrige || r.anufo;
+            if (!r) {
+                c.innerHTML = `<p>Donnée introuvable ou corrompue.</p>`;
+                return;
+            }
+            let fr = r.fr_corrige || r.fr_propose || '', en = r.en_corrige || r.en_propose || '', an = r.anufo_corrige || r.anufo || '—';
 
             c.innerHTML = `
-                <h2>${r.anufo} <small>(${r.frequence || '?'}×, source: ${r.source || '?'})</small></h2>
+                <h2>${an} <small>(${r.frequence || '?'}×, source: ${r.source || '?'})</small></h2>
                 <label>Mot anufo (corriger si besoin)</label>
                 <input id="an" value="${an}">
 
@@ -127,9 +132,9 @@
                 <input id="en" value="${en}">
                 <div class="cands">${(r.en_candidats || []).map(x => `<span class="chip" onclick="document.getElementById('en').value='${x}'">${x}</span>`).join('')}</div>
 
-                ${r.exemple && r.exemple.anufo ? `<div class="ex"><b>Exemple (${r.exemple.ref || ''}) :</b><br>${r.exemple.anufo}<br><small>${r.exemple.fr || ''}</small></div>` : ''}
+                ${(r.exemple && r.exemple && r.exemple.anufo) ? `<div class="ex"><b>Exemple (${r.exemple.ref || ''}) :</b><br>${r.exemple.anufo}<br><small>${r.exemple.fr || ''}</small></div>` : ''}
 
-                ${r.formes_fusionnees && r.formes_fusionnees.length > 1 ? `<div class="ex"><b>⚠ Formes fusionnées par ton :</b><br>${r.formes_fusionnees.map(x => `${x.anufo} (${x.frequence}×) → ${x.fr_propose || '?'} / ${x.en_propose || '?'}`).join('<br>')}</div>` : ''}
+                ${(r.formes_fusionnees && r.formes_fusionnees.length > 1) ? `<div class="ex"><b>⚠ Formes fusionnées par ton :</b><br>${r.formes_fusionnees.map(x => `${x.anufo || '—'} (${x.frequence || '0'}×) → ${x.fr_propose || '?'} / ${x.en_propose || '?'}`).join('<br>')}</div>` : ''}
 
                 <label>Note (qc_note)</label>
                 <textarea id="qcnote" rows="2">${r.qc_note || ''}</textarea>
