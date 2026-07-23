@@ -6,46 +6,86 @@
     <title>Validation — {{ collection_name }}</title>
     <link rel="stylesheet" href="/static/style.css">
     <style>
-        body { font-family: system-ui; margin: 0; background: #f4f4f5; color: #18181b; }
-        header { position: sticky; top: 0; background: #1e293b; color: #fff; padding: 12px 20px; display: flex; gap: 20px; align-items: center; z-index: 10; }
-        .bar { flex: 1; height: 10px; background: #334155; border-radius: 5px; overflow: hidden; }
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #f4f4f5; color: #18181b; }
+        header {
+            position: sticky;
+            top: 0;
+            background: #1e293b;
+            color: #fff;
+            padding: 0 20px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        .back-btn {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: #fff; }
+        .bar {
+            flex: 1;
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+            max-width: 300px;
+        }
         .fill { height: 100%; background: #22c55e; width: 0%; transition: width 0.4s ease-out; }
+        #stat { font-size: 13px; font-weight: 500; white-space: nowrap; }
+
         main { display: flex; height: calc(100vh - 54px); }
-        #list { width: 38%; overflow: auto; border-right: 1px solid #ddd; background: #fff; }
-        #focus { flex: 1; padding: 24px; overflow: auto; }
-        .row { padding: 8px 14px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; gap: 10px; align-items: center; }
+        #list { width: 350px; overflow: auto; border-right: 1px solid #ddd; background: #fff; }
+        #focus { flex: 1; padding: 24px; overflow: auto; display: flex; justify-content: center; }
+
+        .row { padding: 10px 14px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; gap: 10px; align-items: center; transition: background 0.1s; }
         .row:hover { background: #f0f9ff; }
-        .row.sel { background: #dbeafe; }
+        .row.sel { background: #dbeafe; border-left: 4px solid #3b82f6; }
         .badge { font-size: 11px; padding: 2px 7px; border-radius: 10px; margin-left: auto; }
-        .fiable { background: #dcfce7; color: #166534; }
+        .fiable { background: #dcfce7; color: #16653 la; }
         .averif { background: #fef9c3; color: #854d0e; }
         .done { background: #e0e7ff; color: #3730a3; }
         .anufo { font-weight: 600; }
-        .card { max-width: 640px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        label { display: block; margin: 14px 0 4px; font-size: 13px; color: #475569; font-weight: 600; }
-        input, textarea { width: 100%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
-        .cands { margin: 6px 0; display: flex; gap: 6px; flex-wrap: wrap; }
+
+        .card { width: 100%; max-width: 640px; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: fit-content; }
+        label { display: block; margin: 16px 0 6px; font-size: 13px; color: #64748b; font-weight: 600; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; box-sizing: border-box; transition: border-color 0.2s; }
+        .cands { margin: 8px 0; display: flex; gap: 6px; flex-wrap: wrap; }
         .chip { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 14px; cursor: pointer; font-size: 13px; }
         .chip:hover { background: #e2e8f0; }
-        .btns { margin-top: 20px; display: flex; gap: 10px; }
-        button { padding: 10px 18px; border: 0; border-radius: 8px; font-size: 15px; cursor: pointer; transition: opacity 0.2s; }
+        .btns { margin-top: 24px; display: flex; gap: 12px; align-items: center; }
+        button { padding: 10px 20px; border: 0; border-radius: 8px; font-size: 15px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .ok { background: #22c5_5e; color: #fff; }
+        .ok { background: #22c55e; color: #fff; }
+        .ok:hover { background: #16a34a; }
         .corr { background: #3b82f6; color: #fff; }
-        .skip { background: #e2e8f0; }
-        .ex { margin-top: 18px; padding: 12px; background: #f8fafc; border-left: 3px solid #94a3b8; font-size: 14px; border-radius: 4px; }
-        fieldset { border: 1px solid #cbd5e1; border-radius: 8px; margin: 14px 0; padding: 10px 14px; }
-        legend { font-size: 13px; color: #475569; font-weight: 600; padding: 0 6px; }
-        .pair { display: flex; gap: 8px; margin: 6px 0; }
+        .corr:hover { background: #2563eb; }
+        .skip { background: #e2e8f0; color: #475569; }
+        .skip:hover { background: #cbd5e1; }
+        .ex { margin-top: 20px; padding: 14px; background: #f8fafc; border-left: 4px solid #94a3b8; font-size: 14px; border-radius: 6px; }
+        fieldset { border: 1px solid #e2e8f0; border-radius: 8px; margin: 16px 0; padding: 14px; background: #fafafa; }
+        legend { font-size: 13px; color: #64748b; font-weight: 600; padding: 0 8px; }
+        .pair { display: flex; gap: 8px; margin: 8px 0; }
         .pair input { flex: 1; }
-        .pair button, .objcard button { background: #fee2e2; color: #991b1b; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
-        .objcard { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin: 8px 0; }
-        .objcard div { font-size: 14px; margin: 2px 0; }
-        .addbtn { background: #e0e7ff; color: #3730a3; border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer; margin-top: 6px; }
+        .pair button, .objcard button { background: #fee2e2; color: #991b1b; border: 0; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
+        .objcard { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin: 8px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .objcard div { font-size: 14px; margin: 4px 0; display: flex; gap: 8px; }
+        .objcard b { color: #64748b; font-size: 12px; min-width: 80px; }
+        .addbtn { background: #e0e7ff; color: #3730a3; border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; margin-top: 8px; font-weight: 500; }
         small { color: #64748b; }
-        .nav-links { display: flex; gap: 10px; align-items: center; }
-        .back-btn { color: white; text-decoration: none; font-size: 14px; opacity: 0.8; }
-        .back-btn:hover { opacity: 1; }
         #save-indicator { display: none; font-size: 12px; color: #22c55e; font-weight: 600; margin-left: 10px; }
     </style>
 </head>
@@ -56,7 +96,7 @@
             <b>Validation — {{ collection_name }}</b>
         </div>
         <div class="bar"><div class="fill" id="fill"></div></div>
-        <span id="stat">0 / 0 validés</span
+        <span id="stat">0 / 0 validés</span>
     </header>
     <main>
         <div id="list"></div>
@@ -117,7 +157,6 @@
                 let b = r.valide_humain ? 'done' : (r.statut == 'fiable' ? 'fiable' : 'averif');
                 let bt = r.valide_humain ? 'validé' : (r.statut || 'à vérifier');
 
-                // Mapping simple pour la liste
                 const getVal = (obj, keys) => {
                     for (let k of keys) { if (obj[k]) return obj[k]; }
                     return '—';
@@ -141,6 +180,9 @@
                 return `<label>${f.key}</label><input data-k="${f.key}" value="${(val == null ? '' : val).toString().replace(/"/g, '&quot;')}">`;
             }
             if (f.type == 'object') {
+                if (!val || Object.keys(val).length === 0) {
+                    return `<fieldset><legend>${f.key}</legend><small>Aucune donnée</small></fieldset>`;
+                }
                 let sub = f.subfields.map(sk => {
                     let v = (val && val[sk] != null) ? val[sk] : '';
                     return `<label>${sk}</label><input data-k="${f.key}.${sk}" value="${String(v).replace(/"/g, '&quot;')}">`;
@@ -149,9 +191,12 @@
             }
             if (f.type == 'list_of_chips') {
                 let chips = (val || []).map(x => `<span class="chip" onclick="fillChip('${f.target || ''}', '${String(x).replace(/'/g, "\\'")}')">${x}</span>`).join('');
-                return `<label>${f.key}</label><div class="cands">${chips || '<small>—</small>'}</div>`;
+                return `<label>${f.key}</label><div class="cands">${chips || '<small>Aucun candidat</small>'}</div>`;
             }
             if (f.type == 'list_of_pairs') {
+                if (!val || val.length === 0) {
+                    return `<fieldset><legend>${f.key}</legend><small>Aucune paire</small></fieldset>`;
+                }
                 let pairs = (val || []).map((p, pi) => `<div class="pair">
                     <input data-pair="${f.key}.${pi}.0" value="${String(p[0] || '').replace(/"/g, '&quot;')}">
                     <input data-pair="${f.key}.${pi}.1" value="${String(p[1] || '').replace(/"/g, '&quot;')}">
@@ -160,8 +205,11 @@
                     <button class="addbtn" onclick="addPair('${f.key}')">+ ajouter une paire</button></fieldset>`;
             }
             if (f.type == 'list_of_objects') {
+                if (!val || val.length === 0) {
+                    return `<fieldset><legend>${f.key}</legend><small>Aucun élément</small></fieldset>`;
+                }
                 let items = (val || []).map((o, oi) => `<div class="objcard">${f.item_keys.map(k => `<div><b>${k}:</b> ${typeof o[k] == 'object' ? JSON.stringify(o[k]) : (o[k] || '')}</div>`).join('')}
-                    <button onclick="removeObj('${f.key}', ${oi})">✕ retirer</button></div>`).join('');
+                    <button onclick="remove laObj('${f.key}', ${oi})">✕ retirer</button></div>`).join('');
                 let form = f.item_keys.map(k => `<input placeholder="${k}" data-newobj="${f.key}.${k}">`).join('');
                 return `<fieldset><legend>${f.key}</legend>${items || '<small>Aucun élément</small>'}
                     <div class="pair">${form}</div>
@@ -179,7 +227,6 @@
             }
 
             if (isVocabMode()) {
-                // MODE VOCABULAIRE (Interface optimisée)
                 const getVal = (keys) => {
                     for (let k of keys) { if (r[k] !== undefined && r[k] !== null && r[k] !== '') return r[k]; }
                     return '';
@@ -189,7 +236,7 @@
                 let en = getVal(['en_corrige', 'en_propose', 'en', 'english', 'gloss_en_principale']);
 
                 c.innerHTML = `
-                    <h2>${an} <small>(${r.frequence || r.frequence_bible || '?'}×, source: ${r.source || (r.meta && r.meta.source) || '?'})</small></h2>
+                    <h2 style="margin-top:0">${an} <small>(${r.frequence || r.frequence_bible || '?'}×, source: ${r.source || (r.meta && r.meta.source) || '?'})</small></h2>
                     <label>Mot anufo (corriger si besoin)</label>
                     <input id="an" value="${an}">
                     <label>Traduction française</label>
@@ -203,14 +250,13 @@
                     <label>Note (qc_note)</label>
                     <textarea id="qcnote" rows="2">${r.qc_note || (r.qc && r.qc.note) || ''}</textarea>
                     <div class="btns">
-                        <button id="btn-valide" class="ok" onclick="valide()">✓ Valider</button>
+                        <button id="btn-valide" class la="ok" onclick="valide()">✓ Valider</button>
                         <button id="btn-corr" class="corr" onclick="valide()">✎ Enregistrer</button>
                         <button id="btn-skip" class="skip" onclick="next()">Passer →</button>
                         <span id="save-indicator">Enregistrement...</span>
                     </div>
                     <p><small>Raccourcis : Entrée = valider · flèches ↑↓ = naviguer</small></p>`;
             } else {
-                // MODE GÉNÉRIQUE (Interface dynamique basée sur le schéma)
                 let html = schema.map(f => fieldHtml(f, r)).join('');
                 html += `
                     <label>Note (qc_note)</label>
@@ -273,7 +319,6 @@
                 data.qc_note = document.getElementById('qcnote').value;
                 data.valide_humain = true;
             } else {
-                // Collecte dynamique des données
                 document.querySelectorAll('[data-k]').forEach(el => {
                     let path = el.getAttribute('data-k');
                     let { o, k } = getPath(data, path);
