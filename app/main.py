@@ -31,9 +31,11 @@ class RowUpdate(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    """List all available collections (datasets) to validate."""
-    # Get list of all collections in the database
-    collections = await db.list_collection_names()
+    """Lister toutes les collections (jeux de données) à valider."""
+    # Récupérer la liste des noms de collections
+    col_names = await db.list_collection_names()
+    # Forcer la conversion en liste de strings pour éviter les erreurs Jinja2
+    collections = [str(name) for name in col_names]
     return templates.TemplateResponse("index.html", {"request": request, "collections": collections})
 
 @app.get("/validate/{collection_name}", response_class=HTMLResponse)
