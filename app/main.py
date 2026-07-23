@@ -50,7 +50,13 @@ async def validate_page(request: Request, collection_name: str):
     if collection_name not in await db.list_collection_names():
         raise HTTPException(status_code=404, detail="Collection non trouvée")
 
-    return templates.TemplateResponse("validate.html", {"request": request, "collection_name": collection_name})
+    try:
+        # On utilise la même méthode manuelle que pour l'index pour contourner le bug de cache de Jinja2
+        template = templates.env.get_template("validate.html")
+        html_content = template.render(request=request, collection_name=collection_name)
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        return HTMLResponse(content=f"Erreur lors du rendu de la page de validation : {str(e)}", status_code=500)
 
 @app.get("/api/rows/{collection_name}")
 async def get_rows(collection_name: str):
