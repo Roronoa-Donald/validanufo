@@ -117,10 +117,25 @@
                 c.innerHTML = `<p>Donnée introuvable ou corrompue.</p>`;
                 return;
             }
-            let fr = r.fr_corrige || r.fr_propose || '', en = r.en_corrige || r.en_propose || '', an = r.anufo_corrige || r.anufo || '—';
+
+            // --- MAPPING UNIVERSEL DES CHAMPS ---
+            // On cherche la valeur dans plusieurs champs possibles selon le format du fichier
+            const getVal = (keys) => {
+                for (let k of keys) {
+                    if (r[k] !== undefined && r[k] !== null && r[k] !== '') return r[k];
+                }
+                return '';
+            };
+
+            let an = getVal(['anufo_corrige', 'anufo', 'anufo_norm', 'mot']);
+            let fr = getVal(['fr_corrige', 'fr_propose', 'fr', 'gloss_fr_principale']);
+            let en = getVal(['en_corrige', 'en_propose', 'en', 'english', 'gloss_en_principale']);
+
+            // Gestion du statut (qc.status ou statut)
+            let statut = r.statut || (r.qc && r.qc.status) || 'à vérifier';
 
             c.innerHTML = `
-                <h2>${an} <small>(${r.frequence || '?'}×, source: ${r.source || '?'})</small></h2>
+                <h2>${an} <small>(${r.frequence || r.frequence_bible || '?'}×, source: ${r.source || (r.meta && r.meta.source) || '?'})</small></h2>
                 <label>Mot anufo (corriger si besoin)</label>
                 <input id="an" value="${an}">
 
@@ -137,7 +152,7 @@
                 ${(r.formes_fusionnees && r.formes_fusionnees.length > 1) ? `<div class="ex"><b>⚠ Formes fusionnées par ton :</b><br>${r.formes_fusionnees.map(x => `${x.anufo || '—'} (${x.frequence || '0'}×) → ${x.fr_propose || '?'} / ${x.en_propose || '?'}`).join('<br>')}</div>` : ''}
 
                 <label>Note (qc_note)</label>
-                <textarea id="qcnote" rows="2">${r.qc_note || ''}</textarea>
+                <textarea id="qcnote" rows="2">${r.qc_note || (r.qc && r.qc.note) || ''}</textarea>
 
                 <div class="btns">
                     <button id="btn-valide" class="ok" onclick="valide()">✓ Valider</button>
