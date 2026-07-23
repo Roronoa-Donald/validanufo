@@ -9,7 +9,7 @@
         body { font-family: system-ui; margin: 0; background: #f4f4f5; color: #18181b; }
         header { position: sticky; top: 0; background: #1e293b; color: #fff; padding: 12px 20px; display: flex; gap: 20px; align-items: center; z-index: 10; }
         .bar { flex: 1; height: 10px; background: #334155; border-radius: 5px; overflow: hidden; }
-        .fill { height: 100%; background: #22c55e; width: 0%; transition: width 0.3s; }
+        .fill { height: 100%; background: #22c55e; width: 0%; transition: width 0.4s ease-out; }
         main { display: flex; height: calc(100vh - 54px); }
         #list { width: 38%; overflow: auto; border-right: 1px solid #ddd; background: #fff; }
         #focus { flex: 1; padding: 24px; overflow: auto; }
@@ -28,7 +28,8 @@
         .chip { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 14px; cursor: pointer; font-size: 13px; }
         .chip:hover { background: #e2e8f0; }
         .btns { margin-top: 20px; display: flex; gap: 10px; }
-        button { padding: 10px 18px; border: 0; border-radius: 8px; font-size: 15px; cursor: pointer; }
+        button { padding: 10px 18px; border: 0; border-radius: 8px; font-size: 15px; cursor: pointer; transition: opacity 0.2s; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
         .ok { background: #22c55e; color: #fff; }
         .corr { background: #3b82f6; color: #fff; }
         .skip { background: #e2e8f0; }
@@ -37,6 +38,7 @@
         .nav-links { display: flex; gap: 10px; align-items: center; }
         .back-btn { color: white; text-decoration: none; font-size: 14px; opacity: 0.8; }
         .back-btn:hover { opacity: 1; }
+        #save-indicator { display: none; font-size: 12px; color: #22c55e; font-weight: 600; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -67,15 +69,22 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: d ? JSON.stringify(d) : null
             });
+            if (!r.ok) {
+                const err = await r.json();
+                throw new Error(err.error || "Erreur lors de la requête");
+            }
             return r.json();
         }
 
         async function boot() {
-            rows = await api(`/api/rows/${collectionName}`);
-            // reprise : 1re non validée
-            let i = rows.findIndex(r => !r.valide_humain);
-            cur = i < 0 ? 0 : i;
-            render();
+            try {
+                rows = await api(`/api/rows/${collectionName}`);
+                let i = rows.findIndex(r => !r.valide_humain);
+                cur = i < 0 ? 0 : i;
+                render();
+            } catch (e) {
+                document.getElementById('card').innerHTML = `<p style="color:red">Erreur : ${e.message}</p>`;
+            }
         }
 
         function render() {
@@ -126,15 +135,25 @@
                 <textarea id="qcnote" rows="2">${r.qc_note || ''}</textarea>
 
                 <div class="btns">
-                    <button class="ok" onclick="valide()">✓ Valider</button>
-                    <button class="corr" onclick="valide()">✎ Enregistrer</button>
-                    <button class="skip" onclick="next()">Passer →</button>
+                    <button id="btn-valide" class="ok" onclick="valide()">✓ Valider</button>
+                    <button id="btn-corr" class="corr" onclick="valide()">✎ Enregistrer</button>
+                    <button id="btn-skip" class="skip" onclick="next()">Passer →</button>
+                    <span id="save-indicator">Enregistrement...</span>
                 </div>
                 <p><small>Raccourcis : Entrée = valider · flèches ↑↓ = naviguer</small></p>`;
         }
 
         async function valide() {
             let r = rows[cur];
+            const btnVal = document.getElementById('btn-valide');
+            const btnCorr = document.getElementById('btn-corr');
+            const btnSkip = document.getElementById('btn-skip');
+            const indicator = document.getElementById('save-indicator');
+
+            // Désactiver les boutons et afficher l'indicateur
+            [btnVal, btnCorr, btnSkip].forEach(b => b.disabled = true);
+            indicator.style.display = 'inline';
+
             const data = {
                 ...r,
                 anufo_corrige: document.getElementById('an').value,
@@ -144,16 +163,22 @@
                 valide_humain: true
             };
 
-            const res = await api('/api/save', {
-                collection: collectionName,
-                index: cur,
-                data: data
-            });
+            try {
+                const res = await api('/api/save', {
+                    collection: collectionName,
+                    index: cur,
+                    data: data
+                });
 
-            if (res.ok) {
-                next();
-            } else {
-                alert("Erreur lors de la sauvegarde : " + res.error);
+                if (res.ok) {
+                    rows[cur] = data; // Mise à jour locale immédiate
+                    next();
+                }
+            } catch (e) {
+                alert("Erreur lors de la sauvegarde : " + e.message);
+            } finally {
+                [btnVal, btnCorr, btnSkip].forEach(b => b.disabled = false);
+                indicator.style.display = 'none';
             }
         }
 
