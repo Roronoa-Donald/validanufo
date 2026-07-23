@@ -1,0 +1,16 @@
+body { margin: 0; padding: 0; }
+.card { transition: transform 0.2s ease-in-out; }
+.card:hover { transform: scale(1.01); }
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+.chip {
+    transition: all 0.1s;
+    user-select: none;
+}
+.chip:active {
+    transform: scale(0.95);
+    background: #e2e8f0;
+}

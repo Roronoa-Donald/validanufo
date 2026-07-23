@@ -1,0 +1,100 @@
+{"id":"G0001","domaine":"salutation_ia","fr":"Bonjour, comment puis-je t'aider aujourd'hui ?","en":"Hello, how can I help you today?","anufo":""}
+{"id":"G0002","domaine":"salutation_ia","fr":"Je ne comprends pas bien, peux-tu répéter s'il te plaît ?","en":"I don't understand well, can you repeat please?","anufo":""}
+{"id":"G0003","domaine":"salutation_ia","fr":"Dis-moi ce que tu veux savoir exactement.","en":"Tell me what you want to know exactly.","anufo":""}
+{"id":"G0004","domaine":"salutation_ia","fr":"Merci beaucoup pour ton aide, c'était très utile.","en":"Thank you very much for your help, it was very useful.","anufo":""}
+{"id":"G0005","domaine":"salutation_ia","fr":"Attends un moment, je réfléchis à ta question.","en":"Wait a moment, I am thinking about your question.","anufo":""}
+{"id":"G0006","domaine":"salutation_ia","fr":"Peux-tu m'expliquer cela d'une autre manière ?","en":"Can you explain this to me another way?","anufo":""}
+{"id":"G0007","domaine":"salutation_ia","fr":"Je vais te donner la réponse dans un instant.","en":"I will give you the answer in a moment.","anufo":""}
+{"id":"G0008","domaine":"salutation_ia","fr":"As-tu d'autres questions à me poser ?","en":"Do you have other questions to ask me?","anufo":""}
+{"id":"G0009","domaine":"salutation_quotidien","fr":"Bonjour, comment as-tu passé la nuit ?","en":"Good morning, how did you spend the night?","anufo":""}
+{"id":"G0010","domaine":"salutation_quotidien","fr":"Bonsoir, comment s'est passée ta journée ?","en":"Good evening, how was your day?","anufo":""}
+{"id":"G0011","domaine":"salutation_quotidien","fr":"Comment va ta famille à la maison ?","en":"How is your family at home?","anufo":""}
+{"id":"G0012","domaine":"salutation_quotidien","fr":"Je suis content de te voir aujourd'hui.","en":"I am happy to see you today.","anufo":""}
+{"id":"G0013","domaine":"salutation_quotidien","fr":"Nous ne nous sommes pas vus depuis longtemps.","en":"We have not seen each other for a long time.","anufo":""}
+{"id":"G0014","domaine":"salutation_quotidien","fr":"Passe une bonne journée et rentre bien.","en":"Have a good day and get home safely.","anufo":""}
+{"id":"G0015","domaine":"marche","fr":"Combien coûte ce sac de riz au marché ?","en":"How much does this bag of rice cost at the market?","anufo":""}
+{"id":"G0016","domaine":"marche","fr":"C'est trop cher, peux-tu baisser le prix ?","en":"It is too expensive, can you lower the price?","anufo":""}
+{"id":"G0017","domaine":"marche","fr":"Je veux acheter des tomates et des oignons.","en":"I want to buy tomatoes and onions.","anufo":""}
+{"id":"G0018","domaine":"marche","fr":"Donne-moi deux mesures de maïs s'il te plaît.","en":"Give me two measures of maize please.","anufo":""}
+{"id":"G0019","domaine":"marche","fr":"Le marché est très animé aujourd'hui.","en":"The market is very busy today.","anufo":""}
+{"id":"G0020","domaine":"marche","fr":"Je n'ai pas assez d'argent sur moi maintenant.","en":"I don't have enough money on me now.","anufo":""}
+{"id":"G0021","domaine":"marche","fr":"Peux-tu me garder cette marchandise jusqu'à demain ?","en":"Can you keep this merchandise for me until tomorrow?","anufo":""}
+{"id":"G0022","domaine":"marche","fr":"Ces poissons sont-ils frais ce matin ?","en":"Are these fish fresh this morning?","anufo":""}
+{"id":"G0023","domaine":"argent","fr":"Je vais envoyer de l'argent par mobile money.","en":"I will send money by mobile money.","anufo":""}
+{"id":"G0024","domaine":"argent","fr":"As-tu reçu l'argent que je t'ai envoyé ?","en":"Did you receive the money I sent you?","anufo":""}
+{"id":"G0025","domaine":"argent","fr":"Je dois recharger du crédit sur mon téléphone.","en":"I need to recharge credit on my phone.","anufo":""}
+{"id":"G0026","domaine":"argent","fr":"Peux-tu me prêter un peu d'argent jusqu'à la fin du mois ?","en":"Can you lend me some money until the end of the month?","anufo":""}
+{"id":"G0027","domaine":"argent","fr":"Le prix des choses a beaucoup augmenté cette année.","en":"The price of things has increased a lot this year.","anufo":""}
+{"id":"G0028","domaine":"argent","fr":"Je vais retirer de l'argent chez l'agent.","en":"I will withdraw money at the agent.","anufo":""}
+{"id":"G0029","domaine":"transport","fr":"Où puis-je trouver un taxi pour la ville ?","en":"Where can I find a taxi to town?","anufo":""}
+{"id":"G0030","domaine":"transport","fr":"Combien coûte le transport jusqu'au marché ?","en":"How much does transport to the market cost?","anufo":""}
+{"id":"G0031","domaine":"transport","fr":"La moto est en panne, je dois la réparer.","en":"The motorcycle is broken down, I must repair it.","anufo":""}
+{"id":"G0032","domaine":"transport","fr":"La route est très mauvaise pendant la saison des pluies.","en":"The road is very bad during the rainy season.","anufo":""}
+{"id":"G0033","domaine":"transport","fr":"Nous allons partir tôt demain matin.","en":"We are going to leave early tomorrow morning.","anufo":""}
+{"id":"G0034","domaine":"transport","fr":"Le véhicule est plein, attendons le prochain.","en":"The vehicle is full, let's wait for the next one.","anufo":""}
+{"id":"G0035","domaine":"maison","fr":"Je dois balayer la cour avant de cuisiner.","en":"I must sweep the yard before cooking.","anufo":""}
+{"id":"G0036","domaine":"maison","fr":"Il faut aller chercher de l'eau au puits.","en":"We need to go fetch water at the well.","anufo":""}
+{"id":"G0037","domaine":"maison","fr":"La lampe ne marche plus, il faut une nouvelle pile.","en":"The lamp no longer works, we need a new battery.","anufo":""}
+{"id":"G0038","domaine":"maison","fr":"Ferme bien la porte avant de dormir.","en":"Close the door well before sleeping.","anufo":""}
+{"id":"G0039","domaine":"maison","fr":"Les enfants doivent ranger la maison ce matin.","en":"The children must tidy the house this morning.","anufo":""}
+{"id":"G0040","domaine":"nourriture","fr":"Qu'allons-nous manger ce soir à la maison ?","en":"What are we going to eat this evening at home?","anufo":""}
+{"id":"G0041","domaine":"nourriture","fr":"La sauce a besoin d'un peu plus de sel.","en":"The sauce needs a little more salt.","anufo":""}
+{"id":"G0042","domaine":"nourriture","fr":"Je prépare le tô avec de la sauce gombo.","en":"I am preparing tô with okra sauce.","anufo":""}
+{"id":"G0043","domaine":"nourriture","fr":"As-tu déjà mangé ou as-tu encore faim ?","en":"Have you already eaten or are you still hungry?","anufo":""}
+{"id":"G0044","domaine":"nourriture","fr":"Le repas est prêt, venez tous manger.","en":"The meal is ready, come everyone and eat.","anufo":""}
+{"id":"G0045","domaine":"foyer_famille","fr":"Ma mère est partie rendre visite à sa sœur.","en":"My mother went to visit her sister.","anufo":""}
+{"id":"G0046","domaine":"foyer_famille","fr":"Mon père travaille au champ depuis ce matin.","en":"My father has been working in the field since this morning.","anufo":""}
+{"id":"G0047","domaine":"foyer_famille","fr":"L'enfant ressemble beaucoup à son grand-père.","en":"The child looks a lot like his grandfather.","anufo":""}
+{"id":"G0048","domaine":"foyer_famille","fr":"Nous allons célébrer le baptême du nouveau-né.","en":"We are going to celebrate the baptism of the newborn.","anufo":""}
+{"id":"G0049","domaine":"foyer_famille","fr":"Toute la famille se réunit pour la fête.","en":"The whole family gathers for the celebration.","anufo":""}
+{"id":"G0050","domaine":"foyer_famille","fr":"Le vieux raconte des histoires aux enfants le soir.","en":"The old man tells stories to the children in the evening.","anufo":""}
+{"id":"G0051","domaine":"deuil","fr":"Nous sommes venus présenter nos condoléances à la famille.","en":"We came to present our condolences to the family.","anufo":""}
+{"id":"G0052","domaine":"deuil","fr":"Le vieil homme est décédé la nuit dernière.","en":"The old man passed away last night.","anufo":""}
+{"id":"G0053","domaine":"deuil","fr":"Les funérailles auront lieu après-demain.","en":"The funeral will take place the day after tomorrow.","anufo":""}
+{"id":"G0054","domaine":"deuil","fr":"Que Dieu accueille son âme en paix.","en":"May God receive his soul in peace.","anufo":""}
+{"id":"G0055","domaine":"amour","fr":"Je pense à toi tout le temps.","en":"I think about you all the time.","anufo":""}
+{"id":"G0056","domaine":"amour","fr":"Veux-tu m'accompagner à la fête ce soir ?","en":"Do you want to come with me to the party tonight?","anufo":""}
+{"id":"G0057","domaine":"amour","fr":"Mon cœur est content quand je te vois.","en":"My heart is happy when I see you.","anufo":""}
+{"id":"G0058","domaine":"amour","fr":"Nous allons nous marier l'année prochaine.","en":"We are going to get married next year.","anufo":""}
+{"id":"G0059","domaine":"amour","fr":"Prends soin de toi, tu me manques beaucoup.","en":"Take care of yourself, I miss you a lot.","anufo":""}
+{"id":"G0060","domaine":"sante","fr":"J'ai mal à la tête depuis ce matin.","en":"I have had a headache since this morning.","anufo":""}
+{"id":"G0061","domaine":"sante","fr":"Il faut aller à l'hôpital pour te soigner.","en":"You need to go to the hospital to get treatment.","anufo":""}
+{"id":"G0062","domaine":"sante","fr":"L'enfant a de la fièvre, donne-lui un médicament.","en":"The child has a fever, give him medicine.","anufo":""}
+{"id":"G0063","domaine":"sante","fr":"Bois beaucoup d'eau et repose-toi bien.","en":"Drink a lot of water and rest well.","anufo":""}
+{"id":"G0064","domaine":"sante","fr":"Le docteur dit que tu vas bientôt guérir.","en":"The doctor says you will recover soon.","anufo":""}
+{"id":"G0065","domaine":"sante","fr":"Lave-toi bien les mains avant de manger.","en":"Wash your hands well before eating.","anufo":""}
+{"id":"G0066","domaine":"politique","fr":"Les élections auront lieu dans quelques mois.","en":"The elections will take place in a few months.","anufo":""}
+{"id":"G0067","domaine":"politique","fr":"Le chef du village a réuni tout le monde.","en":"The village chief gathered everyone.","anufo":""}
+{"id":"G0068","domaine":"politique","fr":"Nous devons voter pour un bon dirigeant.","en":"We must vote for a good leader.","anufo":""}
+{"id":"G0069","domaine":"politique","fr":"Le gouvernement va construire une nouvelle école.","en":"The government is going to build a new school.","anufo":""}
+{"id":"G0070","domaine":"agriculture","fr":"Il est temps de semer le maïs cette semaine.","en":"It is time to sow the maize this week.","anufo":""}
+{"id":"G0071","domaine":"agriculture","fr":"La récolte a été bonne cette année.","en":"The harvest was good this year.","anufo":""}
+{"id":"G0072","domaine":"agriculture","fr":"Il faut désherber le champ avant les pluies.","en":"We must weed the field before the rains.","anufo":""}
+{"id":"G0073","domaine":"agriculture","fr":"Les animaux ont abîmé les cultures cette nuit.","en":"The animals damaged the crops last night.","anufo":""}
+{"id":"G0074","domaine":"agriculture","fr":"Nous allons vendre les ignames au marché.","en":"We are going to sell the yams at the market.","anufo":""}
+{"id":"G0075","domaine":"meteo","fr":"Il va pleuvoir cet après-midi, prends ton parapluie.","en":"It is going to rain this afternoon, take your umbrella.","anufo":""}
+{"id":"G0076","domaine":"meteo","fr":"Le soleil est très fort aujourd'hui.","en":"The sun is very strong today.","anufo":""}
+{"id":"G0077","domaine":"meteo","fr":"La saison sèche a commencé ce mois-ci.","en":"The dry season has started this month.","anufo":""}
+{"id":"G0078","domaine":"meteo","fr":"Le vent souffle fort et il fait froid.","en":"The wind is blowing hard and it is cold.","anufo":""}
+{"id":"G0079","domaine":"tradition","fr":"Le guérisseur prépare des remèdes avec des plantes.","en":"The healer prepares remedies with plants.","anufo":""}
+{"id":"G0080","domaine":"tradition","fr":"Nos ancêtres nous ont laissé de belles coutumes.","en":"Our ancestors left us beautiful customs.","anufo":""}
+{"id":"G0081","domaine":"tradition","fr":"On joue le tam-tam pendant la fête traditionnelle.","en":"They play the drum during the traditional festival.","anufo":""}
+{"id":"G0082","domaine":"tradition","fr":"Les anciens connaissent le sens de ce rituel.","en":"The elders know the meaning of this ritual.","anufo":""}
+{"id":"G0083","domaine":"comportement","fr":"Sois poli et respecte les personnes âgées.","en":"Be polite and respect elderly people.","anufo":""}
+{"id":"G0084","domaine":"comportement","fr":"Il ne faut pas mentir à ses parents.","en":"One must not lie to one's parents.","anufo":""}
+{"id":"G0085","domaine":"comportement","fr":"Aide ton voisin quand il est dans le besoin.","en":"Help your neighbor when he is in need.","anufo":""}
+{"id":"G0086","domaine":"comportement","fr":"La patience est une grande qualité.","en":"Patience is a great quality.","anufo":""}
+{"id":"G0087","domaine":"comportement","fr":"Ne te mets pas en colère si vite.","en":"Do not get angry so quickly.","anufo":""}
+{"id":"G0088","domaine":"education","fr":"Les enfants vont à l'école chaque matin.","en":"The children go to school every morning.","anufo":""}
+{"id":"G0089","domaine":"education","fr":"L'enseignant apprend à lire aux élèves.","en":"The teacher teaches the students to read.","anufo":""}
+{"id":"G0090","domaine":"education","fr":"Étudie bien pour réussir tes examens.","en":"Study well to succeed in your exams.","anufo":""}
+{"id":"G0091","domaine":"education","fr":"Il faut acheter des cahiers et des stylos.","en":"We need to buy notebooks and pens.","anufo":""}
+{"id":"G0092","domaine":"education","fr":"Mon fils sait déjà écrire son nom.","en":"My son already knows how to write his name.","anufo":""}
+{"id":"G0093","domaine":"conversation_ia","fr":"Quelle heure est-il maintenant s'il te plaît ?","en":"What time is it now please?","anufo":""}
+{"id":"G0094","domaine":"conversation_ia","fr":"Peux-tu me rappeler ce que j'ai dit avant ?","en":"Can you remind me what I said before?","anufo":""}
+{"id":"G0095","domaine":"conversation_ia","fr":"Je veux apprendre quelque chose de nouveau aujourd'hui.","en":"I want to learn something new today.","anufo":""}
+{"id":"G0096","domaine":"conversation_ia","fr":"Explique-moi comment faire cela étape par étape.","en":"Explain to me how to do this step by step.","anufo":""}
+{"id":"G0097","domaine":"conversation_ia","fr":"C'est une bonne idée, je suis d'accord avec toi.","en":"That is a good idea, I agree with you.","anufo":""}
+{"id":"G0098","domaine":"conversation_ia","fr":"Je ne suis pas sûr, laisse-moi réfléchir encore.","en":"I am not sure, let me think again.","anufo":""}
+{"id":"G0099","domaine":"conversation_ia","fr":"Peux-tu me donner un exemple pour mieux comprendre ?","en":"Can you give me an example to understand better?","anufo":""}
+{"id":"G0100","domaine":"conversation_ia","fr":"Répète lentement s'il te plaît, je vais écrire.","en":"Repeat slowly please, I am going to write.","anufo":""}

@@ -1,0 +1,5 @@
+pour lancer l'applis il faut cette commande 
+
+python validator/validator_app.py data_norm/Nom_du_jsonl.jsonl 
+
+exemple python validator/validator_app.py data_norm/vocab_to_validate.jsonl

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation Anufo</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { font-family: system-ui; background: #f4f4f5; color: #18181b; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 600px; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        h1 { color: #1e293b; text-align: center; margin-bottom: 2rem; }
+        .collection-list { display: flex; flex-direction: column; gap: 12px; }
+        .collection-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1e293b;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .collection-item:hover { background: #f8fafc; border-color: #3b82f6; transform: translateY(-2px); }
+        .btn-export { background: #e2e8f0; color: #475569; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; text-decoration: none; }
+        .btn-export:hover { background: #cbd5e1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Validation Anufo</h1>
+        <div class="collection-list">
+            {% for col in collections %}
+            <div style="display: contents;">
+                <a href="/validate/{{ col }}" class="collection-item">
+                    <span>{{ col }}</span>
+                    <a href="/export/{{ col }}" class="btn-export">📥 Exporter en JSONL</a>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
