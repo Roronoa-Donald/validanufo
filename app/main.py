@@ -32,11 +32,16 @@ class RowUpdate(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """Lister toutes les collections (jeux de données) à valider."""
-    # Récupérer la liste des noms de collections
-    col_names = await db.list_collection_names()
-    # Forcer la conversion en liste de strings pour éviter les erreurs Jinja2
-    collections = [str(name) for name in col_names]
-    return templates.TemplateResponse("index.html", {"request": request, "collections": collections})
+    try:
+        col_names = await db.list_collection_names()
+        collections = [str(name) for name in col_names]
+
+        # On utilise la méthode manuelle de rendu pour contourner le bug de cache de Jinja2/Python 3.14
+        template = templates.env.get_template("index.html")
+        html_content = template.render(request=request, collections=collections)
+        return HTMLResponse(content=html_content)
+    except Exception as e:
+        return HTMLResponse(content=f"Erreur lors du chargement de la page d'accueil : {str(e)}", status_code=500)
 
 @app.get("/validate/{collection_name}", response_class=HTMLResponse)
 async def validate_page(request: Request, collection_name: str):
